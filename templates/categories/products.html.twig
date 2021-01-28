@@ -1,0 +1,17 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Catégorie {{ categorie.name }}{% endblock %}
+
+{% block body %}
+    <div style="display: flex">
+        {% for product in products %}
+            {% include 'shared/product-card.html.twig' %}
+        {% endfor %}
+    </div>
+
+    {% if is_granted('ROLE_ADMIN') %}
+        <a href="{{ path('admin_categories_add') }}">Ajouter une catégorie</a>
+        <a href="{{ path('admin_categories_edit', { id: categorie.id }) }}">Modifier la catégorie</a>
+        <a href="{{ path('admin_categories_delete', { id: categorie.id }) }}">Supprimer la catégorie</a>
+    {% endif %}
+{% endblock %}

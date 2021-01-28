@@ -1,0 +1,11 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Mes commandes{% endblock %}
+
+{% block body %}
+    <ul>
+        {% for order in orders | reverse %}
+            <li><a href="{{ path('orders_get', {'id': order.id }) }}">#{{ order.id }} le {{ order.date | date("m/d/Y H:i", "Europe/Paris") }} - {{ order.total | format_currency('EUR', locale = 'fr') }}</a></li>
+        {% endfor %}
+    </ul>
+{% endblock %}

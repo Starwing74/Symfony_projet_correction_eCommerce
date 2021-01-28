@@ -1,0 +1,33 @@
+security:
+    encoders:
+        App\Entity\User: 'auto'
+
+    role_hierarchy:
+        ROLE_ADMIN: ROLE_USER
+
+    providers:
+        users:
+            entity:
+                class: 'App\Entity\User'
+                property: 'mail'
+
+    firewalls:
+        dev:
+            pattern: ^/(_(profiler|wdt)|css|images|js)/
+            security: false
+        main:
+            pattern: ^/
+            anonymous: ~
+            guard:
+                authenticators:
+                    - App\Security\LoginFormAuthenticator
+            logout:
+                path: security_logout
+                # where to redirect after logout
+                # target: app_any_route
+
+    access_control:
+        - { path: ^/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/user/add$, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/user*, roles: ROLE_USER }
+        - { path: ^/admin*, roles: ROLE_ADMIN }

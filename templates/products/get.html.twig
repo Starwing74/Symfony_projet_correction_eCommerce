@@ -1,0 +1,24 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ product.name }} #{{ product.id }}{% endblock %}
+
+{% block body %}
+    <p>{{ product.description }}</p>
+
+    <div>Prix : {{ product.price | format_currency('EUR', locale = 'fr') }}</div>
+
+    {% if product.photo is not null %}
+        <img src="/{{ product.photo }}" />
+    {% endif %}
+
+    <br />
+
+    <a href="{{ path('products_add_to_cart', {'id': product.id }) }}">Ajouter au panier</a>
+
+    <br />
+
+    {% if is_granted('ROLE_ADMIN') %}
+        <a href="{{ path('admin_products_edit', { id: product.id }) }}">Modifier</a>
+        <a href="{{ path('admin_products_delete', { id: product.id }) }}">Supprimer</a>
+    {% endif %}
+{% endblock %}

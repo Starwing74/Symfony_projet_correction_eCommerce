@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="/assets/style.css">
+    <title>{% block title %}{% endblock %} - Site e-commerce</title>
+    {% block stylesheets %}{% endblock %}
+</head>
+<body>
+<header>
+    <h1>Site de e-commerce</h1>
+</header>
+
+<div id="container">
+    <aside>
+        <nav>
+            <ul>
+                <li><a href="{{ path('index') }}">Accueil</a></li>
+                <li><a href="{{ path('cart_index') }}">Panier</a></li>
+                {% if is_granted('ROLE_USER') %}
+                    <li><a href="{{ path('user_orders_index') }}">Mes commandes</a></li>
+                    <li><a href="{{ path('user_edit_index') }}">Mon compte</a></li>
+                    <li><a href="{{ path('security_logout') }}">Déconnexion</a></li>
+                {% else %}
+                    <li><a href="{{ path('security_login') }}">Connexion</a></li>
+                    <li><a href="{{ path('user_add') }}">Inscription</a></li>
+                {% endif %}
+                <li><a href="{{ path('products_index') }}">Tous les produits</a></li>
+                <li>
+                    <b>Catégories</b>
+                    <ul>
+                        {% for category in categoriesRepository.findAll %}
+                            <li><a href="{{ path('categories_get_products', { id: category.id }) }}">{{ category.name }}</a></li>
+                        {% endfor %}
+                    </ul>
+                </li>
+                {% if is_granted('ROLE_ADMIN') %}
+                    <li>
+                        <b>Administration</b>
+                        <ul>
+                            <li><a href="{{ path('admin_products_add') }}">Ajouter un produit</a></li>
+                            <li><a href="{{ path('admin_categories_add') }}">Ajouter une catégorie</a></li>
+                        </ul>
+                    </li>
+                {% endif %}
+            </ul>
+        </nav>
+    </aside>
+
+    <main>
+        <div>
+            {% for message in app.flashes('success') %}
+                <div>{{ message }}</div>
+            {% endfor %}
+        </div>
+
+        <h2>{{ block('title') }}</h2>
+
+        {% block body %}{% endblock %}
+    </main>
+</div>
+
+<footer>Site de démo pour cours LP Symfony</footer>
+
+{% block javascripts %}{% endblock %}
+</body>
+</html>
