@@ -25,6 +25,7 @@ class Order extends AbstractEntity
     private $user;
 
     /**
+     * EAGER = on récupère les lignes produits en meme temps que la commande
      * @ORM\OneToMany(targetEntity="App\Entity\OrderLine", mappedBy="order", cascade={"persist", "remove"}, fetch="EAGER")
      */
     private $orderLines;

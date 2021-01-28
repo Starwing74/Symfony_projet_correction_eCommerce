@@ -10,6 +10,7 @@ use Doctrine\ORM\Mapping as ORM;
 class OrderLine extends AbstractEntity
 {
     /**
+     * EAGER = on récupère le produit en meme temps que la ligne
      * @ORM\ManyToOne(targetEntity="App\Entity\Product", inversedBy="orderLines", fetch="EAGER")
      * @ORM\JoinColumn(nullable=false)
      */
