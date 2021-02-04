@@ -6,21 +6,29 @@ use App\Entity\Order;
 use App\Entity\User;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
+use Symfony\Component\Security\Core\Security;
 
 class OrderVoter extends Voter {
 
 	const VIEW = 'view';
 
 	/**
+	 * @var Security
+	 */
+	private Security $security;
+
+	public function __construct(Security $security) {
+		$this->security = $security;
+	}
+
+	/**
 	 * @inheritDoc
 	 */
 	protected function supports($attribute, $subject) {
-		// if the attribute isn't one we support, return false
-		if (!in_array($attribute, [self::VIEW], true)) {
+		if ($attribute !== self::VIEW) {
 			return false;
 		}
 
-		// only vote on Post objects inside this voter
 		if (!$subject instanceof Order) {
 			return false;
 		}
@@ -35,13 +43,18 @@ class OrderVoter extends Voter {
 		/** @var User $user */
 		$user = $token->getUser();
 
-		// you know $subject is a Post object, thanks to supports
+		if ($this->security->isGranted('ROLE_ADMIN')) {
+			return true;
+		}
+
 		/** @var Order $order */
 		$order = $subject;
 
 		switch ($attribute) {
 			case self::VIEW:
 				return $user->getId() === $order->getUser()->getId();
+			default:
+				return false;
 		}
 	}
 }

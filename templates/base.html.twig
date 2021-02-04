@@ -18,9 +18,14 @@
                 <li><a href="{{ path('index') }}">Accueil</a></li>
                 <li><a href="{{ path('cart_index') }}">Panier</a></li>
                 {% if is_granted('ROLE_USER') %}
-                    <li><a href="{{ path('user_orders_index') }}">Mes commandes</a></li>
-                    <li><a href="{{ path('user_edit_index') }}">Mon compte</a></li>
-                    <li><a href="{{ path('security_logout') }}">Déconnexion</a></li>
+                    <li>
+                        <b>{{ app.user.name }} - {{ app.user.mail }}</b>
+                        <ul>
+                            <li><a href="{{ path('user_orders_index') }}">Mes commandes</a></li>
+                            <li><a href="{{ path('user_edit_index') }}">Mon compte</a></li>
+                            <li><a href="{{ path('security_logout') }}">Déconnexion</a></li>
+                        </ul>
+                    </li>
                 {% else %}
                     <li><a href="{{ path('security_login') }}">Connexion</a></li>
                     <li><a href="{{ path('user_add') }}">Inscription</a></li>
