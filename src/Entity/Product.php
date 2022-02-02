@@ -4,45 +4,32 @@ namespace App\Entity;
 
 use App\DTO\AbstractDto;
 use App\DTO\ProductDto;
+use App\Repository\ProductRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
-/**
- * @ORM\Entity(repositoryClass="App\Repository\ProductRepository")
- */
+#[ORM\Entity(ProductRepository::class)]
 class Product extends AbstractEntity
 {
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
-    private $name;
+	#[ORM\Column(type: "string", length: 255)]
+	private string $name;
 
-    /**
-     * @ORM\Column(type="string", length=255, nullable=true)
-     */
-    private $photo;
+	#[ORM\Column(type: "string", length: 255, nullable: true)]
+	private ?string $photo = null;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Category", inversedBy="products")
-     * @ORM\JoinColumn(nullable=false)
-     */
-    private $category;
+	#[ORM\ManyToOne(targetEntity: Category::class, inversedBy: "products")]
+	#[ORM\JoinColumn(nullable: false)]
+	private Category $category;
 
-    /**
-     * @ORM\Column(type="float")
-     */
-    private $price;
+	#[ORM\Column(type: "float")]
+	private float $price;
 
-    /**
-     * @ORM\Column(type="text", nullable=true)
-     */
-    private $description;
+	#[ORM\Column(type: "text", nullable: true)]
+	private ?string $description = null;
 
-    /**
-     * @ORM\OneToMany(targetEntity="App\Entity\OrderLine", mappedBy="product")
-     */
-    private $orderLines;
+	#[ORM\OneToMany(mappedBy: "product", targetEntity: OrderLine::class)]
+	private Collection $orderLines;
 
 	public function __construct() {
 		$this->orderLines = new ArrayCollection();
@@ -61,65 +48,65 @@ class Product extends AbstractEntity
 		}
 	}
 
-    public function getName(): ?string
-    {
-        return $this->name;
-    }
+	public function getName(): string
+	{
+		return $this->name;
+	}
 
-    public function setName(string $name): self
-    {
-        $this->name = $name;
+	public function setName(string $name): self
+	{
+		$this->name = $name;
 
-        return $this;
-    }
+		return $this;
+	}
 
-    public function getPhoto(): ?string
-    {
-        return $this->photo;
-    }
+	public function getPhoto(): ?string
+	{
+		return $this->photo;
+	}
 
-    public function setPhoto(?string $photo): self
-    {
-        $this->photo = $photo;
+	public function setPhoto(?string $photo): self
+	{
+		$this->photo = $photo;
 
-        return $this;
-    }
+		return $this;
+	}
 
-    public function getCategory(): ?Category
-    {
-        return $this->category;
-    }
+	public function getCategory(): Category
+	{
+		return $this->category;
+	}
 
-    public function setCategory(?Category $category): self
-    {
-        $this->category = $category;
+	public function setCategory(Category $category): self
+	{
+		$this->category = $category;
 
-        return $this;
-    }
+		return $this;
+	}
 
-    public function getPrice(): ?float
-    {
-        return $this->price;
-    }
+	public function getPrice(): float
+	{
+		return $this->price;
+	}
 
-    public function setPrice(float $price): self
-    {
-        $this->price = $price;
+	public function setPrice(float $price): self
+	{
+		$this->price = $price;
 
-        return $this;
-    }
+		return $this;
+	}
 
-    public function getDescription(): ?string
-    {
-        return $this->description;
-    }
+	public function getDescription(): ?string
+	{
+		return $this->description;
+	}
 
-    public function setDescription(?string $description): self
-    {
-        $this->description = $description;
+	public function setDescription(?string $description): self
+	{
+		$this->description = $description;
 
-        return $this;
-    }
+		return $this;
+	}
 
 	/**
 	 * @return Collection|OrderLine[]

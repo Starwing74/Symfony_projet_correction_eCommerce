@@ -8,10 +8,7 @@ use App\Repository\AbstractRepository;
 
 abstract class AbstractEntityService {
 
-	/**
-	 * @var AbstractRepository
-	 */
-	protected $repository;
+	protected AbstractRepository $repository;
 
 	public function __construct(AbstractRepository $repository) {
 		$this->repository = $repository;

@@ -8,37 +8,22 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 class UserDto extends AbstractDto  {
 
-	/**
-	 * @var string
-	 * @Assert\NotBlank()
-	 * @Assert\Length(max="250")
-	 */
-	public $name;
+	#[Assert\NotBlank]
+	#[Assert\Length(max: 250)]
+	public string $name;
 
-	/**
-	 * @var string
-	 * @Assert\NotBlank(groups={"add"})
-	 */
-	public $password;
+	#[Assert\NotBlank(groups: ["add"])]
+	public ?string $password = null;
 
-	/**
-	 * @var string
-	 * @Assert\NotBlank(groups={"add"})
-	 */
-	public $passwordConfirm;
+	#[Assert\NotBlank(groups: ["add"])]
+	public ?string $passwordConfirm = null;
 
-	/**
-	 * @var string | null
-	 * @Assert\NotBlank()
-	 */
-	public $address;
+	#[Assert\NotBlank]
+	public ?string $address = null;
 
-	/**
-	 * @var string
-	 * @Assert\Email()
-	 * @Assert\NotBlank()
-	 */
-	public $mail;
+	#[Assert\NotBlank]
+	#[Assert\Email]
+	public string $mail;
 
 	/**
 	 * @param User $user

@@ -9,9 +9,7 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class CategoriesController extends AbstractController {
 
-	/**
-	 * @Route("/category/{id}", name="categories_get_products", methods={"GET"})
-	 */
+	#[Route("/category/{id}", name: "categories_get_products", methods: ["GET"])]
 	public function getProductsForCategory(Category $category): Response {
 		return $this->render('categories/products.html.twig', [
 			'categorie' => $category,

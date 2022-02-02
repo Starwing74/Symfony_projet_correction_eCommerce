@@ -7,23 +7,16 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-/**
- * @Route("/cart")
- */
+#[Route("/cart")]
 class CartController extends AbstractController {
 
-	/**
-	 * @var CartService
-	 */
-	private $cartService;
+	private CartService $cartService;
 
 	public function __construct(CartService $cartService) {
 		$this->cartService = $cartService;
 	}
 
-	/**
-	 * @Route("/", name="cart_index", methods={"GET"})
-	 */
+    #[Route("/", name: "cart_index", methods: ["GET"])]
 	public function index(): Response {
 		return $this->render('cart/index.html.twig', [
 			'lines' => $this->cartService->getProductsAsOrderLineInCart(),
@@ -31,9 +24,7 @@ class CartController extends AbstractController {
 		]);
 	}
 
-	/**
-	 * @Route("/clear", name="cart_clear", methods={"GET"})
-	 */
+    #[Route("/clear", name: "cart_clear", methods: ["GET"])]
 	public function clear(): Response {
 		$this->cartService->clearCart();
 

@@ -8,19 +8,16 @@ use App\Entity\AbstractEntity;
 use App\Entity\Product;
 use App\Repository\ProductRepository;
 use Symfony\Component\Config\Definition\Exception\Exception;
-use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\DependencyInjection\ParameterBag\ContainerBagInterface;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
 class ProductService extends AbstractEntityService {
 
-	/**
-	 * @var ContainerInterface
-	 */
-	private $container;
+	private ContainerBagInterface $container;
 
-	public function __construct(ContainerInterface $container, ProductRepository $productRepository) {
+	public function __construct(ContainerBagInterface $container, ProductRepository $productRepository) {
 		parent::__construct($productRepository);
 		$this->container = $container;
 	}
@@ -32,7 +29,7 @@ class ProductService extends AbstractEntityService {
 	public function addOrUpdate(AbstractDto $productDto, AbstractEntity $product): void {
 		$this->saveFile($productDto);
 
-		if ($product->getPhoto()) {
+		if ($productDto->photo && $product->getPhoto()) {
 			$this->deleteFile($product);
 		}
 
@@ -54,7 +51,7 @@ class ProductService extends AbstractEntityService {
 	}
 
 	private function deleteFile(Product $product): void {
-		@unlink($this->container->getParameter('kernel.project_dir') . '/public/' . $product->getPhoto());
+		@unlink($this->container->get('kernel.project_dir') . '/public/' . $product->getPhoto());
 	}
 
 	private function saveFile(ProductDto $productDto): void {
@@ -63,7 +60,7 @@ class ProductService extends AbstractEntityService {
 
 			try {
 				$productDto->photo = $productDto->photo->move(
-					$this->container->getParameter('upload_dir'),
+					$this->container->get('upload_dir'),
 					$newFilename
 				);
 			} catch (FileException $e) {

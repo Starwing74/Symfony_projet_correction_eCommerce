@@ -11,23 +11,16 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-/**
- * @Route("/admin/categories")
- */
+#[Route("/admin/categories")]
 class AdminCategoriesController extends AbstractController
 {
-	/**
-	 * @var CategoryService
-	 */
-	private $categoryService;
+	private CategoryService $categoryService;
 
 	public function __construct(CategoryService $categoryService) {
 		$this->categoryService = $categoryService;
 	}
 
-	/**
-     * @Route("/add", name="admin_categories_add", methods={"GET", "POST"})
-     */
+    #[Route("/add", name: "admin_categories_add", methods: ["GET", "POST"])]
     public function add(Request $request): Response
     {
 	    $categorytDto = new CategoryDto();
@@ -52,9 +45,7 @@ class AdminCategoriesController extends AbstractController
 	    ]);
     }
 
-    /**
-     * @Route("/{id}/edit", name="admin_categories_edit", methods={"GET", "POST"})
-     */
+    #[Route("/{id}/edit", name: "admin_categories_edit", methods: ["GET", "POST"])]
     public function edit(Request $request, Category $category): Response
     {
 	    $categoryDto = new CategoryDto();
@@ -81,9 +72,7 @@ class AdminCategoriesController extends AbstractController
 	    ]);
     }
 
-    /**
-     * @Route("/{id}", name="admin_categories_delete", methods={"GET"})
-     */
+    #[Route("/{id}", name: "admin_categories_delete", methods: ["GET"])]
     public function delete(Category $category): Response
     {
 	    $this->categoryService->delete($category);

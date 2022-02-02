@@ -17,8 +17,7 @@ use Symfony\Component\Validator\Constraints\File;
 
 class ProductType extends AbstractType {
 
-	/** @var EntityManagerInterface */
-	private $entityManager;
+	private EntityManagerInterface $entityManager;
 
 	public function __construct(EntityManagerInterface $entityManager)
 	{
@@ -27,15 +26,23 @@ class ProductType extends AbstractType {
 
 	public function buildForm(FormBuilderInterface $builder, array $options) {
 		$builder
-			->add('name', TextType::class)
-			->add('description', TextareaType::class)
-			->add('price', NumberType::class)
+			->add('name', TextType::class, [
+				'label' => 'Nom'
+			])
+			->add('description', TextareaType::class, [
+				'label' => 'Description'
+			])
+			->add('price', NumberType::class, [
+				'label' => 'Prix'
+			])
 			->add('category', EntityType::class, [
 				'class' => Category::class,
 				'choices' => $this->entityManager->getRepository(Category::class)->findAll(),
-				'choice_label' => 'name'
+				'choice_label' => 'name',
+				'label' => 'Catégorie'
 			])
 			->add('photo', FileType::class, [
+				'label' => 'Photo',
 				'constraints' => [
 					new File([
 						'maxSize' => '4096k',

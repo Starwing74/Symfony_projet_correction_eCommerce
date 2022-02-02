@@ -4,25 +4,19 @@ namespace App\Entity;
 
 use App\DTO\AbstractDto;
 use App\DTO\CategoryDto;
+use App\Repository\CategoryRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
-/**
- * @ORM\Entity(repositoryClass="App\Repository\CategoryRepository")
- */
+#[ORM\Entity(CategoryRepository::class)]
 class Category extends AbstractEntity
 {
+	#[ORM\Column(type: "string", length: 255, nullable: false)]
+    private string $name;
 
-    /**
-     * @ORM\Column(type="string", length=255, nullable=false)
-     */
-    private $name;
-
-    /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Product", mappedBy="category")
-     */
-    private $products;
+	#[ORM\OneToMany(mappedBy: "category", targetEntity: Product::class)]
+    private Collection $products;
 
     public function __construct()
     {

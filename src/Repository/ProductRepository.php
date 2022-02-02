@@ -25,7 +25,10 @@ class ProductRepository extends AbstractRepository
 	 */
 	public function getLast(int $nb): array {
 		return $this->createQueryBuilder('p')
-		            ->orderBy('p.id', 'DESC')
+//					->select('p, sum(orderLines.quantity)') // Si on veut récupérer le produit et le nombre de vendus
+					->leftJoin('p.orderLines', 'orderLines')
+					->groupBy('p.id')
+		            ->orderBy('sum(orderLines.quantity)', 'DESC')
 		            ->setMaxResults($nb)
 		            ->getQuery()
 		            ->getResult()

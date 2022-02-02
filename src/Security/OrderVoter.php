@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Security\Voter;
+namespace App\Security;
 
 use App\Entity\Order;
 use App\Entity\User;
@@ -10,11 +10,8 @@ use Symfony\Component\Security\Core\Security;
 
 class OrderVoter extends Voter {
 
-	const VIEW = 'view';
+	public const VIEW = 'view';
 
-	/**
-	 * @var Security
-	 */
 	private Security $security;
 
 	public function __construct(Security $security) {
@@ -24,7 +21,7 @@ class OrderVoter extends Voter {
 	/**
 	 * @inheritDoc
 	 */
-	protected function supports($attribute, $subject) {
+	protected function supports($attribute, $subject): bool {
 		if ($attribute !== self::VIEW) {
 			return false;
 		}
@@ -39,7 +36,7 @@ class OrderVoter extends Voter {
 	/**
 	 * @inheritDoc
 	 */
-	protected function voteOnAttribute($attribute, $subject, TokenInterface $token) {
+	protected function voteOnAttribute($attribute, $subject, TokenInterface $token): bool {
 		/** @var User $user */
 		$user = $token->getUser();
 

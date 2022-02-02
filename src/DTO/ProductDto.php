@@ -6,39 +6,25 @@ use App\Entity\AbstractEntity;
 use App\Entity\Category;
 use App\Entity\Product;
 use Doctrine\Common\Annotations\Annotation\Required;
-use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\Validator\Constraints as Assert;
 
 class ProductDto extends AbstractDto  {
 
-	/**
-	 * @var string
-	 * @Assert\NotBlank()
-	 * @Assert\Length(max="250")
-	 */
-	public $name;
+	#[Assert\NotBlank]
+	#[Assert\Length(max: 250)]
+	public string $name;
 
-	/**
-	 * @var Category
-	 * @Required()
-	 */
-	public $category;
+	#[Required]
+	public Category $category;
 
-	/**
-	 * @var string | null
-	 */
-	public $description;
+	public ?string $description = null;
 
-	/**
-	 * @var int
-	 * @Assert\Range(min="1")
-	 */
-	public $price;
+	#[Assert\NotBlank]
+	#[Assert\Range(min: 1)]
+	public int $price;
 
-	/**
-	 * @var UploadedFile | null
-	 */
-	public $photo;
+	public ?File $photo = null;
 
 	/**
 	 * @param Product $product

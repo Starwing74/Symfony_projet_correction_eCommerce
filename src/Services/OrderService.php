@@ -8,14 +8,9 @@ use App\Repository\OrderRepository;
 
 class OrderService {
 
-	/**
-	 * @var CartService
-	 */
-	private $cartService;
-	/**
-	 * @var OrderRepository
-	 */
-	private $orderRepository;
+	private CartService $cartService;
+
+	private OrderRepository $orderRepository;
 
 	public function __construct(CartService $cartService, OrderRepository $orderRepository) {
 		$this->cartService = $cartService;

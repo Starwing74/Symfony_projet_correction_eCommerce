@@ -8,12 +8,9 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 class CategoryDto extends AbstractDto {
 
-	/**
-	 * @var string
-	 * @Assert\NotBlank()
-	 * @Assert\Length(max="250")
-	 */
-	public $name;
+	#[Assert\NotBlank]
+	#[Assert\Length(max: 250)]
+	public string $name;
 
 	/**
 	 * @param Category $category

@@ -11,26 +11,28 @@ use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 
-/**
- * @Route("/user")
- */
+#[Route("/user")]
 class UserController extends AbstractController
 {
-	/**
-	 * @var UserService
-	 */
-	private $userService;
+	private UserService $userService;
+	private TokenStorageInterface $tokenStorage;
 
-	public function __construct(UserService $userService) {
+	public function __construct(UserService $userService, TokenStorageInterface $tokenStorage) {
 		$this->userService = $userService;
+		$this->tokenStorage = $tokenStorage;
 	}
 
-	/**
-     * @Route("/add", name="user_add", methods={"GET", "POST"})
-     */
+	#[Route("/add", name: "user_add", methods: ["GET", "POST"])]
     public function add(Request $request): Response
     {
+	    /** @var User $user */
+	    $user = $this->getUser();
+	    if ($user) {
+		    return $this->redirectToRoute('index');
+	    }
+
 	    $userDto = new UserDto();
 
 	    $form = $this->createForm(UserType::class, $userDto, ['validation_groups' => ['Default', 'add']]);
@@ -51,9 +53,7 @@ class UserController extends AbstractController
         ]);
     }
 
-    /**
-     * @Route("/", name="user_edit_index", methods={"GET", "POST"})
-     */
+	#[Route("/", name: "user_edit_index", methods: ["GET", "POST"])]
     public function editIndex(Request $request): Response
     {
 	    /** @var User $user */
@@ -64,16 +64,18 @@ class UserController extends AbstractController
         $form = $this->createForm(UserType::class, $userDto);
         $form->handleRequest($request);
 
-        if ($userDto->password && $userDto->password !== $userDto->passwordConfirm) {
-	        $form->get('passwordConfirm')->addError(new FormError('Les mots de passes ne correspondent pas'));
-        }
+        if ($form->isSubmitted()) {
+	        if ($userDto->password && $userDto->password !== $userDto->passwordConfirm) {
+		        $form->get('passwordConfirm')->addError(new FormError('Les mots de passes ne correspondent pas'));
+	        }
 
-        if ($form->isSubmitted() && $form->isValid()) {
-        	$this->userService->addOrUpdate($userDto, $user);
+			if ($form->isValid()) {
+				$this->userService->addOrUpdate($userDto, $user);
 
-	        $this->addFlash('success', 'Informations modifiées !');
+				$this->addFlash('success', 'Informations modifiées !');
 
-            return $this->redirectToRoute('user_edit_index');
+				return $this->redirectToRoute('user_edit_index');
+			}
         }
 
         return $this->render('users/edit.html.twig', [
@@ -83,25 +85,21 @@ class UserController extends AbstractController
         ]);
     }
 
-    /**
-     * @Route("/delete", name="user_delete", methods={"GET"})
-     */
+    #[Route("/delete", name: "user_delete", methods: ["GET"])]
     public function delete(): Response
     {
     	/** @var User $user */
 	    $user = $this->getUser();
 	    $this->userService->delete($user);
 
-	    $this->get('security.token_storage')->setToken(null);
+	    $this->tokenStorage->setToken();
 
 	    $this->addFlash('success', 'Compte supprimé !');
 
 	    return $this->redirectToRoute('security_logout');
     }
 
-    /**
-     * @Route("/orders", name="user_orders_index", methods={"GET"})
-     */
+    #[Route("/orders", name: "user_orders_index", methods: ["GET"])]
     public function orders(): Response
     {
     	/** @var User $user */

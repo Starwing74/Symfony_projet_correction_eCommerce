@@ -4,29 +4,22 @@ namespace App\Controller;
 
 use App\Entity\Order;
 use App\Entity\User;
-use App\Security\Voter\OrderVoter;
+use App\Security\OrderVoter;
 use App\Services\OrderService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-/**
- * @Route("/order")
- */
+#[Route("/order")]
 class OrderController extends AbstractController {
 
-	/**
-	 * @var OrderService
-	 */
-	private $orderService;
+	private OrderService $orderService;
 
 	public function __construct(OrderService $orderService) {
 		$this->orderService = $orderService;
 	}
 
-	/**
-	 * @Route("/add", name="orders_add", methods={"GET"})
-	 */
+	#[Route("/add", name: "orders_add", methods: ["GET"])]
 	public function addOrder(): Response
 	{
 		/** @var User $user */
@@ -40,9 +33,7 @@ class OrderController extends AbstractController {
 		]);
 	}
 
-	/**
-	 * @Route("/{id}", name="orders_get", methods={"GET"})
-	 */
+	#[Route("/{id}", name: "orders_get", methods: ["GET"])]
 	public function getById(Order $order): Response {
 		$this->denyAccessUnlessGranted(OrderVoter::VIEW, $order);
 

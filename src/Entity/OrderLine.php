@@ -2,46 +2,32 @@
 
 namespace App\Entity;
 
+use App\Repository\OrderLineRepository;
 use Doctrine\ORM\Mapping as ORM;
 
-/**
- * @ORM\Entity(repositoryClass="App\Repository\OrderLineRepository")
- */
+#[ORM\Entity(OrderLineRepository::class)]
 class OrderLine extends AbstractEntity
 {
-    /**
-     * EAGER = on récupère le produit en meme temps que la ligne
-     * @ORM\ManyToOne(targetEntity="App\Entity\Product", inversedBy="orderLines", fetch="EAGER")
-     * @ORM\JoinColumn(nullable=false)
-     */
-    private $product;
+    // EAGER = on récupère le produit en meme temps que la ligne
+     #[ORM\ManyToOne(targetEntity: Product::class, fetch: "EAGER", inversedBy: "orderLines")]
+     #[ORM\JoinColumn(nullable: false)]
+    private Product $product;
 
-    /**
-     * @ORM\Column(type="integer", nullable=false)
-     */
-    private $quantity;
+     #[ORM\Column(type: "integer", nullable: false)]
+    private int $quantity;
 
-	/**
-	 * @ORM\Column(type="float", nullable=false)
-	 */
-	private $price;
+	 #[ORM\Column(type: "float", nullable: false)]
+	private float $price;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Order", inversedBy="orderLines")
-     * @ORM\JoinColumn(nullable=false)
-     */
-    private $order;
+     #[ORM\ManyToOne(targetEntity: Order::class, inversedBy: "orderLines")]
+     #[ORM\JoinColumn(nullable: false)]
+     private Order $order;
 
     public function __construct(Product $product = null) {
     	$this->setQuantity(1);
 	    if ($product) {
 	    	$this->setProduct($product);
 	    }
-    }
-
-	public function getId(): ?int
-    {
-        return $this->id;
     }
 
     public function getProduct(): Product
@@ -81,7 +67,7 @@ class OrderLine extends AbstractEntity
         return $this;
     }
 
-	public function getPrice(): ?float
+	public function getPrice(): float
 	{
 		return $this->price;
 	}

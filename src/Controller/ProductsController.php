@@ -9,46 +9,33 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-/**
- * @Route("/products")
- */
+#[Route("/products")]
 class ProductsController extends AbstractController {
 
-	/**
-	 * @var ProductRepository
-	 */
-	private $productRepository;
-	/**
-	 * @var CartService
-	 */
-	private $cartService;
+	private ProductRepository $productRepository;
+
+	private CartService $cartService;
 
 	public function __construct(ProductRepository $productRepository, CartService $cartService) {
 		$this->productRepository = $productRepository;
 		$this->cartService = $cartService;
 	}
 
-	/**
-	 * @Route("/", name="products_index", methods={"GET"})
-	 */
+	#[Route("/", name: "products_index", methods: ["GET"])]
 	public function index(): Response {
 		return $this->render('products/index.html.twig', [
 			'products' => $this->productRepository->findAll()
 		]);
 	}
 
-	/**
-	 * @Route("/{id}", name="products_get", methods={"GET"})
-	 */
+	#[Route("/{id}", name: "products_get", methods: ["GET"])]
 	public function getById(Product $product): Response {
 		return $this->render('products/get.html.twig', [
 			'product' => $product
 		]);
 	}
 
-	/**
-	 * @Route("/{id}/cart/add", name="products_add_to_cart", methods={"GET"})
-	 */
+	#[Route("/{id}/cart/add", name: "products_add_to_cart", methods: ["GET"])]
 	public function addToCartById(Product $product): Response {
 		$this->cartService->addProductToCart($product);
 
@@ -57,9 +44,7 @@ class ProductsController extends AbstractController {
 		return $this->redirectToRoute('cart_index');
 	}
 
-	/**
-	 * @Route("/{id}/cart/delete", name="products_delete_from_cart", methods={"GET"})
-	 */
+    #[Route("/{id}/cart/delete", name: "products_delete_from_cart", methods: ["GET"])]
 	public function deleteFromCartById(Product $product): Response {
 		$this->cartService->removeProductFromCart($product);
 

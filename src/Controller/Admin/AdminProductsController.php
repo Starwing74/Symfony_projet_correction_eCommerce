@@ -5,35 +5,22 @@ namespace App\Controller\Admin;
 use App\DTO\ProductDto;
 use App\Entity\Product;
 use App\Form\ProductType;
-use App\Repository\ProductRepository;
 use App\Services\ProductService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-/**
- * @Route("/admin/products")
- */
+#[Route("/admin/products")]
 class AdminProductsController extends AbstractController {
 
-	/**
-	 * @var ProductRepository
-	 */
-	private $productRepository;
-	/**
-	 * @var ProductService
-	 */
-	private $productService;
+	private ProductService $productService;
 
-	public function __construct(ProductRepository $productRepository, ProductService $productService) {
-		$this->productRepository = $productRepository;
+	public function __construct(ProductService $productService) {
 		$this->productService = $productService;
 	}
 
-	/**
-	 * @Route("/{id}/edit", name="admin_products_edit", methods={"GET", "POST"})
-	 */
+    #[Route("/{id}/edit", name: "admin_products_edit", methods: ["GET", "POST"])]
 	public function edit(Product $product, Request $request): Response {
 		$productDto = new ProductDto();
 
@@ -59,9 +46,7 @@ class AdminProductsController extends AbstractController {
 		]);
 	}
 
-	/**
-	 * @Route("/add", name="admin_products_add", methods={"GET", "POST"})
-	 */
+    #[Route("/add", name: "admin_products_add", methods: ["GET", "POST"])]
 	public function add(Request $request): Response {
 		$productDto = new ProductDto();
 
@@ -85,9 +70,7 @@ class AdminProductsController extends AbstractController {
 		]);
 	}
 
-	/**
-	 * @Route("/{id}/delete", name="admin_products_delete", methods={"GET"})
-	 */
+    #[Route("/{id}/delete", name: "admin_products_delete", methods: ["GET"])]
 	public function delete(Product $product): Response {
 		$this->productService->delete($product);
 

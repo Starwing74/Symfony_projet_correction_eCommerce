@@ -6,21 +6,17 @@ use App\Entity\OrderLine;
 use App\Entity\Product;
 use App\Repository\ProductRepository;
 use Symfony\Component\Config\Definition\Exception\Exception;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
 class CartService {
 
-	/**
-	 * @var SessionInterface
-	 */
-	private $session;
-	/**
-	 * @var ProductRepository
-	 */
-	private $productRepository;
+	private RequestStack $requestStack;
 
-	public function __construct(SessionInterface $session, ProductRepository $productRepository) {
-		$this->session = $session;
+	private ProductRepository $productRepository;
+
+	public function __construct(RequestStack $requestStack, ProductRepository $productRepository) {
+		$this->requestStack      = $requestStack;
 		$this->productRepository = $productRepository;
 	}
 
@@ -83,10 +79,10 @@ class CartService {
 	 * @return int[]
 	 */
 	private function getCart(): array {
-		return $this->session->get('cart', []);
+		return $this->requestStack->getSession()->get('cart', []);
 	}
 
 	private function saveCart(array $cart): void {
-		$this->session->set('cart', $cart);
+		$this->requestStack->getSession()->set('cart', $cart);
 	}
 }

@@ -1,0 +1,17 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Liste des utilisateurs{% endblock %}
+
+{% block body %}
+    {% if users is not empty %}
+        <ul>
+            {% for user in users %}
+                <li>
+                    {{ user.name }} à {{ user.address }}. Mail : <a href="mailto:{{ user.mail }}">{{ user.mail }}</a>. Dernière connexion le {{ user.lastLogin | date("m/d/Y H:i", "Europe/Paris") }}
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        Aucune utilisateur
+    {% endif %}
+{% endblock %}
