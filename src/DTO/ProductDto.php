@@ -21,7 +21,7 @@ class ProductDto extends AbstractDto  {
 	public ?string $description = null;
 
 	#[Assert\NotBlank]
-	#[Assert\Range(min: 1)]
+	#[Assert\Range(min: 0.01)]
 	public int $price;
 
 	public ?File $photo = null;

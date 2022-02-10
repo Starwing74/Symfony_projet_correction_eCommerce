@@ -3,12 +3,16 @@
 {% block title %}{{ product.name }} #{{ product.id }}{% endblock %}
 
 {% block body %}
-    <p>{{ product.description }}</p>
+    <p>Dans la catégorie <a href="{{ path('categories_get_products', { id: product.category.id}) }}">{{ product.category.name }}</a></p>
+
+    <pre>{{ product.description }}</pre>
 
     <div>Prix : {{ product.price | format_currency('EUR', locale = 'fr') }}</div>
 
     {% if product.photo is not null %}
-        <img src="/{{ product.photo }}" />
+        <img src="/{{ product.photo }}" alt="Image pour {{ product.name }}" />
+    {% else %}
+        <img src="/assets/no_image.jpg" alt="Aucune image pour {{ product.name }}" />
     {% endif %}
 
     <br />

@@ -3,7 +3,7 @@
 {% block title %}Listes des produits{% endblock %}
 
 {% block body %}
-    <div style="display: flex">
+    <div style="display: flex; flex-wrap: wrap">
         {% for product in products | reverse %}
             {% include 'shared/product-card.html.twig' %}
         {% endfor %}

@@ -33,6 +33,11 @@ class ProductType extends AbstractType {
 				'label' => 'Description'
 			])
 			->add('price', NumberType::class, [
+				'html5' => true,
+				'attr' => [
+					'min' => 0.01,
+					'step' => 0.01,
+				],
 				'label' => 'Prix'
 			])
 			->add('category', EntityType::class, [
